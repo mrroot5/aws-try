@@ -65,10 +65,12 @@ Aquí te dejo un [snippet (gist)](https://gist.github.com/mrroot5/658311314b17d7
 Como vamos a instalar en nuestra máquina lo que necesitamos copiaremos toda la carpeta de configuración.
 
 ```shell
-scp -i nombre-nuestra-key.pem -r docker-config ubuntu@ip_o_dns_de_nuestra_maquina:/home/ubuntu/
+scp -i nombre-nuestra-key.pem -r docker-config/ ubuntu@ip_o_dns_de_nuestra_maquina:/home/ubuntu/
 ```
 
 # DEPENDENCIAS DE NUESTRA INSTANCIA
+
+Antes de decirte qué fichero de la configuración puedes usar para instalar todas las dependencias de una vez, expliquemos un poco que es docker y docker-compose.
 
 ## ¿QUÉ ES DOCKER?
 Resumidamente, encapsula nuestro sistema de tal forma que siempre que lo creemos sea igual. Para iformación más detallada te dejo estos enlaces:
@@ -90,10 +92,28 @@ Es un orquestador para docker, dicho de otra forma, nos permite crear una config
 
 ## INSTALACIÓN
 
-Aquí podemos ejecutar el fichero de `requirements-host.sh` o ejecutar línea a línea lo que encontraremos dentro del fichero e ir comprobando que pasa.
+Entramos en la nueva carpeta que hemos copiada dentro de nuestra instancia:
 
 ```shell
-./requirements-host.sh
+cd docker-config
+```
+
+Comprueba que los ficheros tengan permisos de ejecución si no vas a copiar línea a línea su contenido y ejecutándolo en colsa:
+
+```shell
+ls -la requirements
+```
+
+Debe aparecer algo similar a `-rwxrwxr-x`, de lo contrario deberás darle permisos de ejecución con el siguiente comando:
+
+```shell
+chmod +x requirements/requirements-host.sh requirements/requirements-code.sh
+```
+
+Ahora podremos ejecutar el fichero de `requirements-host.sh` o ejecutar línea a línea lo que encontraremos dentro del fichero e ir comprobando que pasa.
+
+```shell
+./requirements/requirements-host.sh
 ```
 
 # CLONAR NUESTRO REPOSITORIO
@@ -101,8 +121,10 @@ Aquí podemos ejecutar el fichero de `requirements-host.sh` o ejecutar línea a 
 Aquí podemos ejecutar el fichero de `requirements-code.sh` o ejecutar línea a línea lo que encontraremos dentro del fichero e ir comprobando que pasa.
 
 ```shell
-./requirements-code.sh
+./requirements/requirements-code.sh
 ```
+
+**Anotación:** puede que necesites usar el clone mediante https en lugar de ssh como está dentro del fichero de `requirements-code.sh`.
 
 # CREAR LOS CONTENEDORES
 A este punto deberíamos tener todo funcionando en el host. Pasemos a explicar los ficheros de Docker: `docker-compose.yml` y `Dockerfile-python`.
@@ -143,10 +165,10 @@ Tenemos el servicio web que ejecutará nuestro contenedor con python y django. E
 ## CONSTRUIR Y CREAR EL CONTENEDOR
 Si todo ha ido bien ya deberías tener todo listo para crear la imagen de docker y el contenedor asociado a esta.
 
-Para ello vamos a usar `docker-compose up` por simplicidad aunque deberíamos usar `docker stack deploy` ya que usamos un `docker stack init` al instalar docker.
+Para ello vamos a usar `docker-compose up` por simplicidad aunque deberíamos usar `docker stack deploy` ya que usamos un `docker stack init` al instalar docker. Esta operación **puede tardar varias minutos**. Si quieres ver el proceso completo entonces elimina del comando la parte de ` > /dev/null 2>&1 &`.
 
 ```shell
-docker-compose up --build > /dev/null/ 2>&1 &
+docker-compose up --build > /dev/null 2>&1 &
 ```
 
 Explicación del comando:

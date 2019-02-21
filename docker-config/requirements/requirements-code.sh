@@ -1,11 +1,14 @@
-echo "Moving to opt..."
+echo "\e[33mMoving to opt...[0m"
 cd /opt/
-echo -e "Done\n"
-echo "Creating postgres folder..."
+echo -e "\e[32mDone\n\e[0m"
+echo "\e[33mCreating postgres folder...[0m"
 sudo mkdir postgres_data_english_dictionary
-echo -e "Done\n"
-echo "Clonning repo..."
+echo -e "\e[32mDone\n\e[0m"
+echo "\e[33mClonning repo...[0m"
 sudo git clone git@github.com:mrroot5/english-dictionary.git
-cd english-dictionary
-sudo git checkout my-personal-dic
-echo -e "Done\n"
+if [ -d english-dictionary ]
+then
+  cd english-dictionary
+  sudo git checkout my-personal-dic
+fi
+echo -e "\e[32mDone\n\e[0m"
