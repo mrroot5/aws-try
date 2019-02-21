@@ -1,0 +1,36 @@
+version: '3.7'
+
+services:
+#   db:
+#     build:
+#       context: .
+#       dockerfile: Dockerfile-postgres
+#     image: postgres_english_dic:11.2-alpine
+#     environment:
+#       POSTGRES_USER: english_dic_user
+#       POSTGRES_PASSWORD: 0123456789
+#       POSTGRES_DB: english_dictionary
+#     container_name: postgres_english_dic
+#     volumes:
+    #   - postgres_data_english_dictionary:/var/lib/postgresql/data/
+#       - type: bind
+#         source: /opt/postgres_data_english_dictionary
+#         target: /var/lib/postgresql/data/
+    # restart: always
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile-python
+    image: django_english_dic:py3.7.2
+    command: ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+    container_name: django_english_dic
+    volumes:
+      - /opt/english-dictionary:/opt/english-dictionary
+    ports:
+      - 80:8000
+    # depends_on:
+    #   - db
+    # restart: always
+
+# volumes:
+#   postgres_data_english_dictionary:
